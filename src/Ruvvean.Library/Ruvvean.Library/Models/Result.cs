@@ -5,7 +5,7 @@ namespace Ruvvean.Library.Models;
 /// <summary>
 /// Represents the result of an operation, indicating success or failure.
 /// </summary>
-public readonly struct Result : IResult
+public readonly record struct Result : IResult
 {
     /// <inheritdoc/>
     public int? Code
@@ -109,7 +109,7 @@ public readonly struct Result : IResult
 /// Represents the result of an operation that returns a value, indicating success or failure.
 /// </summary>
 /// <typeparam name="T">The type of the value returned on success.</typeparam>
-public readonly struct Result<T> : IResult
+public readonly record struct Result<T> : IResult
 {
     /// <inheritdoc/>
     public int? Code
