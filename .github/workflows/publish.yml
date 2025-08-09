@@ -21,15 +21,14 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Restore
-        run: dotnet restore
-
+        run: dotnet restore --configfile ./src/Ruvvean.Library/nuget.config ./src/Ruvvean.Library/Ruvvean.Library/Ruvvean.Library.csproj
       - name: Build
-        run: dotnet build -c Release --no-restore
+        run: dotnet build -c Release --no-restore ./src/Ruvvean.Library/Ruvvean.Library/Ruvvean.Library.csproj
 
       - name: Pack
         run: |
           VERSION=${GITHUB_REF_NAME#v}
-          dotnet pack ./src/Ruvvean.Library/Ruvvean.Library.csproj             -c Release --no-build             -o ./artifacts             /p:PackageVersion=$VERSION
+          dotnet pack ./src/Ruvvean.Library/Ruvvean.Library/Ruvvean.Library.csproj             -c Release --no-build             -o ./artifacts             /p:PackageVersion=$VERSION
 
       - name: Push to GitHub Packages
         run: |
