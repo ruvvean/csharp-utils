@@ -1,0 +1,36 @@
+name: Publish NuGet to GitHub Packages
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build -c Release --no-restore
+
+      - name: Pack
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          dotnet pack ./src/Ruvvean.Library/Ruvvean.Library.csproj             -c Release --no-build             -o ./artifacts             /p:PackageVersion=$VERSION
+
+      - name: Push to GitHub Packages
+        run: |
+          dotnet nuget push ./artifacts/*.nupkg             --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"             --api-key ${{ secrets.GITHUB_TOKEN }}             --skip-duplicate
