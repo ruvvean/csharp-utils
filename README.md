@@ -1,133 +1,75 @@
 # Ruvvean.Library
 
-Narzędziowa biblioteka .NET od **Ruvvean** – lekka, prosta w użyciu i gotowa do dystrybucji przez **GitHub Packages (NuGet)**.
+A .NET utility library by **Ruvvean** – lightweight, easy to use, and ready for distribution via **GitHub Packages (NuGet)**.
 
-![Ruvvean Library](assets/icon.png)
 
----
+<img src="assets/icon_nuget.png" alt="Ruvvean Library" width="60" height="60" />
 
-## Spis treści
+## Table of Contents
 
-- [Wymagania](#wymagania)
-- [Instalacja](#instalacja)
-  - [GitHub Packages: konfiguracja źródła](#github-packages-konfiguracja-źródła)
-  - [Instalacja pakietu](#instalacja-pakietu)
-- [Szybki start](#szybki-start)
-- [API](#api)
-- [Wydawanie nowej wersji](#wydawanie-nowej-wersji)
-  - [Automatyczna publikacja (GitHub Actions)](#automatyczna-publikacja-github-actions)
-  - [Ręczna publikacja lokalna](#ręczna-publikacja-lokalna)
-- [Dobre praktyki wersjonowania](#dobre-praktyki-wersjonowania)
-- [Rozwiązywanie problemów](#rozwiązywanie-problemów)
-- [Wsparcie i kontakt](#wsparcie-i-kontakt)
-- [Licencja](#licencja)
+- [Requirements](#requirements)
+- [Installation](#installation)
+  - [GitHub Packages: Source Configuration](#github-packages-source-configuration)
+  - [Package Installation](#package-installation)
+- [Quick Start](#quick-start)
+- [Releasing a New Version](#releasing-a-new-version)
+  - [Automatic Publishing (GitHub Actions)](#automatic-publishing-github-actions)
+  - [Manual Local Publishing](#manual-local-publishing)
+- [Versioning Best Practices](#versioning-best-practices)
+- [Troubleshooting](#troubleshooting)
+- [Support & Contact](#support--contact)
+- [License](#license)
 
 ---
 
-## Wymagania
+## Requirements
 
-- .NET SDK **8.0** lub nowszy
-- Konto GitHub z dostępem do **GitHub Packages**
-- (Opcjonalnie do publikacji lokalnej) **Personal Access Token (PAT)** z uprawnieniami: `write:packages`, `read:packages`
+- .NET SDK **9.0** or newer
+- GitHub account with access to **GitHub Packages**
+- (Optional for local publishing) **Personal Access Token (PAT)** with permissions: `write:packages`, `read:packages`
 
-## Instalacja
+## Installation
 
-### GitHub Packages: konfiguracja źródła
+### GitHub Packages: Source Configuration
 
-Utwórz/uzupełnij plik `nuget.config` w katalogu repozytorium lub w profilu użytkownika:
+Create or update the `nuget.config` file in your repository directory or user profile:
+If installing packages locally outside CI, add the source with PAT (one-time):
+### Package Installation
+## Quick Start
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <packageSources>
-    <!-- Zastąp OWNER nazwą konta/organizacji GitHub -->
-    <add key="github" value="https://nuget.pkg.github.com/OWNER/index.json" />
-    <add key="nuget" value="https://api.nuget.org/v3/index.json" />
-  </packageSources>
-</configuration>
-```
+## Releasing a New Version
 
-Jeśli instalujesz pakiety lokalnie poza CI, dodaj źródło z PAT (jednorazowo):
+Semantic versioning is recommended: `MAJOR.MINOR.PATCH`.
 
-```bash
-dotnet nuget add source https://nuget.pkg.github.com/OWNER/index.json   --name github --username OWNER --password YOUR_GITHUB_PAT --store-password-in-clear-text
-```
+1. Ensure `PackageId`, `Authors`, `Company`, `RepositoryUrl` are correct in `Ruvvean.Library.csproj`.
+2. Update the version number or use Git tags (preferred).
+3. Release a tag:
+### Automatic Publishing (GitHub Actions)
 
-### Instalacja pakietu
+The `publish.yml` workflow packs and publishes the package to **GitHub Packages** after pushing a `v*.*.*` tag. It uses the built-in `GITHUB_TOKEN` (sufficient when publishing to packages in the same repository).
 
-```bash
-dotnet add package Ruvvean.Library --source "github"
-```
+### Manual Local Publishing
 
-## Szybki start
+Pack and push the package from your local environment:
+If you haven't configured the source with a token yet:
+## Versioning Best Practices
 
-```csharp
-using Ruvvean.Library;
+- **MAJOR** – breaking changes.
+- **MINOR** – new features, backward compatible.
+- **PATCH** – bug fixes and minor improvements.
+- Tag releases as `vX.Y.Z`, maintain a changelog in `CHANGELOG.md` (optional).
 
-Console.WriteLine(Greeter.Hello("World"));
-// => Hello, World! — from Ruvvean.Library
-```
+## Troubleshooting
 
-## API
+- **401/403 on installation** – check PAT validity and ensure it has `read:packages` (and `write:packages` for publishing).
+- **404 package not found** – ensure the `github` source points to the correct `ruvvean` and you use the correct `PackageId`.
+- **Icon/README not displayed** – check `.csproj` entries: `PackageReadmeFile`, `PackageIcon`, and that files are packed (`<None ... Pack="true" ...>`).
 
-### `Greeter.Hello(string name) : string`
+## Support & Contact
 
-Zwraca powitanie zawierające przekazaną nazwę.
+Issues and ideas: **Issues** tab in the GitHub repository.  
+For business inquiries: contact the **Ruvvean** team.
 
-- **Parametry**: `name` – tekst do wstawienia w powitaniu.
-- **Zwraca**: sformatowany łańcuch powitalny.
+## License
 
-> Własne typy i funkcje dodawaj w folderze `src/Ruvvean.Library/`, pamiętając o aktualizacji dokumentacji XML (///) i changeloga.
-
-## Wydawanie nowej wersji
-
-Zalecamy semantyczne wersjonowanie: `MAJOR.MINOR.PATCH`.
-
-1. Upewnij się, że `PackageId`, `Authors`, `Company`, `RepositoryUrl` są poprawne w `Ruvvean.Library.csproj`.
-2. Zaktualizuj numer wersji albo użyj tagów Git (preferowane).
-3. Wydaj tag:
-   ```bash
-   git tag v1.0.0
-   git push origin v1.0.0
-   ```
-
-### Automatyczna publikacja (GitHub Actions)
-
-Workflow `publish.yml` pakuje i publikuje paczkę na **GitHub Packages** po wypchnięciu taga `v*.*.*`. Używa wbudowanego `GITHUB_TOKEN` (wystarczy, gdy publikujesz do paczek w tym samym repozytorium).
-
-### Ręczna publikacja lokalna
-
-Spakuj i wypchnij paczkę z lokalnego środowiska:
-
-```bash
-dotnet pack ./src/Ruvvean.Library/Ruvvean.Library.csproj -c Release -o ./artifacts
-dotnet nuget push ./artifacts/*.nupkg --source "github" --skip-duplicate
-```
-
-Jeśli nie masz jeszcze skonfigurowanego źródła z tokenem:
-
-```bash
-dotnet nuget add source https://nuget.pkg.github.com/OWNER/index.json   --name github --username OWNER --password YOUR_GITHUB_PAT --store-password-in-clear-text
-```
-
-## Dobre praktyki wersjonowania
-
-- **MAJOR** – zmiany niekompatybilne (breaking changes).
-- **MINOR** – nowe funkcje zachowujące kompatybilność.
-- **PATCH** – poprawki błędów i drobne usprawnienia.
-- Oznaczaj releasy tagami `vX.Y.Z`, changelog prowadź w `CHANGELOG.md` (opcjonalnie).
-
-## Rozwiązywanie problemów
-
-- **401/403 przy instalacji** – sprawdź ważność PAT oraz czy ma `read:packages` (i `write:packages` przy publikacji).
-- **404 nie znajduje pakietu** – upewnij się, że źródło `github` wskazuje właściwego `OWNER` i że używasz poprawnego `PackageId`.
-- **Ikona/README nie wyświetla się** – sprawdź wpisy w `.csproj`: `PackageReadmeFile`, `PackageIcon` oraz czy pliki są pakowane (`<None ... Pack="true" ...>`).
-
-## Wsparcie i kontakt
-
-Problemy i pomysły: zakładka **Issues** w repozytorium GitHub.  
-W sprawach biznesowych: skontaktuj się z zespołem **Ruvvean**.
-
-## Licencja
-
-Projekt jest objęty licencją **MIT**. Szczegóły w pliku `LICENSE`.
+This project is licensed under the **MIT** license. See the `LICENSE` file for details.

@@ -24,7 +24,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Copyright>MIT</Copyright>
-    <PackageIcon>icon.png</PackageIcon>
+    <PackageIcon>icon_nuget.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
@@ -37,7 +37,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\assets\icon.png">
+    <None Include="..\..\..\assets\nuget_icon.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
