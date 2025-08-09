@@ -19,6 +19,11 @@ public static class Measure
     /// <returns>The result of the executed function <paramref name="f"/>.</returns>
     public static T Time<T>(Func<T> f, Action<TimeSpan>? report = null)
     {
+        if (report is null)
+        {
+            return f();
+        }
+
         var sw = Stopwatch.StartNew();
         var result = f();
         sw.Stop();
