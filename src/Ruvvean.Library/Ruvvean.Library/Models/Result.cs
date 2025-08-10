@@ -62,21 +62,6 @@ public readonly record struct Result : IResult
     public static explicit operator bool(Result result) => result.IsSuccess;
 
     /// <summary>
-    /// Converts an array of error messages to a <see cref="Result"/> representing failure.
-    /// </summary>
-    /// <param name="errorMessages">The error messages.</param>
-    /// <returns>A <see cref="Result"/> representing failure.</returns>
-    public static explicit operator Result(string[] errorMessages) => new(errorMessages);
-
-    /// <summary>
-    /// Converts a tuple containing an error code and error messages to a <see cref="Result"/>
-    /// representing failure.
-    /// </summary>
-    /// <param name="tuple">A tuple containing the error code and error messages.</param>
-    /// <returns>A <see cref="Result"/> representing failure.</returns>
-    public static explicit operator Result((int?, string[]?) tuple) => new(tuple.Item2, tuple.Item1);
-
-    /// <summary>
     /// Converts a <see cref="Result{T}"/> (with T as object) to a <see cref="Result"/>.
     /// </summary>
     /// <param name="result">The generic result to convert.</param>
@@ -176,21 +161,6 @@ public readonly record struct Result<T> : IResult
     /// <param name="result">The result to convert.</param>
     /// <returns><c>true</c> if the result is successful; otherwise, <c>false</c>.</returns>
     public static explicit operator bool(Result<T>? result) => result?.IsSuccess ?? false;
-
-    /// <summary>
-    /// Converts an array of error messages to a <see cref="Result{T}"/> representing failure.
-    /// </summary>
-    /// <param name="errorMessages">The error messages.</param>
-    /// <returns>A <see cref="Result{T}"/> representing failure.</returns>
-    public static explicit operator Result<T>(string[]? errorMessages) => new(errorMessages);
-
-    /// <summary>
-    /// Converts a tuple containing an error code and error messages to a <see cref="Result{T}"/>
-    /// representing failure.
-    /// </summary>
-    /// <param name="tuple">A tuple containing the error code and error messages.</param>
-    /// <returns>A <see cref="Result{T}"/> representing failure.</returns>
-    public static explicit operator Result<T>((int?, string[]?) tuple) => new(tuple.Item2, tuple.Item1);
 
     /// <summary>
     /// Converts a <see cref="Result"/> to a <see cref="Result{T}"/>.
