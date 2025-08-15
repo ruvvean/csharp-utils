@@ -1,22 +1,12 @@
-﻿namespace Ruvvean.Library.Mediator.Interfaces;
+﻿using Ruvvean.Library.Models;
+
+namespace Ruvvean.Library.Mediator.Interfaces;
 
 /// <summary>
-/// Marker interface representing a request to be handled by a request handler.
-/// </summary>
-/// <remarks>
-/// This interface does not define any members and is typically used to unify both requests with and
-/// without return values under a common type.
-/// </remarks>
-public interface IRequest;
-
-/// <summary>
-/// Represents a request to be handled by a request handler that produces a response.
+/// Defines a request that returns a response of type <typeparamref name="TResponse"/>.
 /// </summary>
 /// <typeparam name="TResponse">
-/// The type of the response expected from handling the request. Must be a non-nullable type.
+/// The type of response returned by the request. Must implement <see cref="IResult"/> and be non-null.
 /// </typeparam>
-/// <remarks>
-/// This interface extends <see cref="IRequest"/> and is used for requests that return a value when processed.
-/// </remarks>
-public interface IRequest<TResponse> : IRequest
-    where TResponse : notnull;
+public interface IRequest<TResponse>
+    where TResponse : notnull, IResult;

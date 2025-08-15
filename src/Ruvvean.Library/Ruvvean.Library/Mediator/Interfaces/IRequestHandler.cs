@@ -1,41 +1,24 @@
-﻿namespace Ruvvean.Library.Mediator.Interfaces;
+﻿using Ruvvean.Library.Models;
+
+namespace Ruvvean.Library.Mediator.Interfaces;
 
 /// <summary>
-/// Defines a contract for a component responsible for dispatching requests to the appropriate
-/// handlers and asynchronously retrieving results.
+/// Defines a handler for processing requests that produce a response.
 /// </summary>
-/// <remarks>
-/// This interface supports both sending requests that do not return a value and requests that
-/// return a strongly-typed response.
-/// </remarks>
-public interface IRequestHandler
+/// <typeparam name="TRequest">The type of request to handle. Must implement <see cref="IRequest{IResult}"/>.</typeparam>
+public interface IRequestHandler<in TRequest>
+    where TRequest : IRequest<IResult>
 {
     /// <summary>
-    /// Asynchronously sends a request that does not expect a return value.
+    /// Asynchronously handles the specified request and returns a result.
     /// </summary>
-    /// <param name="request">The request implementing <see cref="IRequest"/> to be processed.</param>
-    /// <param name="cancellationToken">A token that can be used to cancel the send operation.</param>
-    /// <returns>A task representing the asynchronous send operation.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="request"/> is <c>null</c>.</exception>
-    Task SendAsync(IRequest request, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Asynchronously sends a request and waits for a strongly-typed response.
-    /// </summary>
-    /// <typeparam name="TResponse">
-    /// The type of the expected response. Must be a non-nullable type.
-    /// </typeparam>
-    /// <param name="request">
-    /// The request implementing <see cref="IRequest{TResponse}"/> to be processed.
+    /// <param name="request">The request to process.</param>
+    /// <param name="cancellationToken">
+    /// A <see cref="CancellationToken"/> that can be used to cancel the operation.
     /// </param>
-    /// <param name="cancellationToken">A token that can be used to cancel the send operation.</param>
     /// <returns>
-    /// A task representing the asynchronous send operation, containing the result of type
-    /// <typeparamref name="TResponse"/>.
+    /// A <see cref="Task{IResult}"/> representing the asynchronous operation, containing the result
+    /// of the request.
     /// </returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="request"/> is <c>null</c>.</exception>
-    Task<TResponse> SendAsync<TResponse>(
-        IRequest<TResponse> request,
-        CancellationToken cancellationToken = default)
-        where TResponse : notnull;
+    Task<IResult> HandleAsync(TRequest request, CancellationToken cancellationToken = default);
 }
